@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Email Sender</title>
+</head>
+<body>
+    <h2>Upload CSV</h2>
+    <form action="/upload" method="post" enctype="multipart/form-data">
+        <input type="file" name="file" accept=".csv">
+        <button type="submit">Upload CSV</button>
+    </form>
+
+    <h2>Upload Google Sheet</h2>
+    <form id="googleSheetForm">
+        <input type="text" name="sheet_id" placeholder="Google Sheet ID" required>
+        <input type="text" name="range" placeholder="Data Range (e.g., Sheet1!A1:C10)" required>
+        <button type="button" onclick="uploadGoogleSheet()">Upload Google Sheet</button>
+    </form>
+
+    <h2>Customize Prompt</h2>
+    <form id="customPromptForm">
+        <textarea name="prompt" placeholder="Enter email customization prompt" required></textarea>
+        <button type="button" onclick="customizePrompt()">Send Customized Emails</button>
+    </form>
+
+    <script>
+        async function uploadGoogleSheet() {
+            const sheetData = { sheet_id: document.getElementsByName('sheet_id')[0].value, range: document.getElementsByName('range')[0].value };
+            await fetch('/upload_google_sheet', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(sheetData) });
+        }
+
+        async function customizePrompt() {
+            const promptData = { prompt: document.getElementsByName('prompt')[0].value };
+            await fetch('/customize_prompt', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(promptData) });
+        }
+    </script>
+</body>
+</html>
